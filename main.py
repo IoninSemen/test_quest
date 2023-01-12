@@ -34,7 +34,7 @@ def read_tasks(db: Session = Depends(get_db)):
     return tasks
 
 
-@app.post("/tasks/{task_id}/parameters/", response_model=schemas.Parameter)
+@app.post("/tasks/{task_sid}/parameters/", response_model=schemas.Parameter)
 def create_parameters_for_task(task_id: int, request: schemas.ParameterCreate, db: Session = Depends(get_db)):
     return crud.create_task_parameter(db = db, params = request, task_id = task_id)
 
