@@ -9,8 +9,10 @@ class ParameterBase(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ParameterCreate(ParameterBase):
     pass
+
 
 class Parameter(ParameterBase):
     id: int
@@ -18,7 +20,6 @@ class Parameter(ParameterBase):
 
     class Config:
         orm_mode = True
-
 
 
 class TaskBase(BaseModel):
