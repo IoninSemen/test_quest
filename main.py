@@ -17,10 +17,10 @@ def get_db():
         yield db
     finally:
         db.close()
-        
 
 
-@app.post("/task/", response_model=schemas.Task)
+
+@app.post("/task/add", response_model=schemas.Task)
 def create_task(request: schemas.TaskCreate, db: Session = Depends(get_db)):
     db_task = crud.get_task_by_uuid(db, task_uuid=request.task_uuid)
     if db_task:
@@ -28,7 +28,7 @@ def create_task(request: schemas.TaskCreate, db: Session = Depends(get_db)):
     return crud.create_task(db=db, task=request)
 
 
-@app.get("/tasks/", response_model=List[schemas.ShowTask])
+@app.get("/tasks", response_model=List[schemas.ShowTask])
 def read_tasks(db: Session = Depends(get_db)):
     tasks = crud.get_tasks(db)
     return tasks
@@ -45,6 +45,6 @@ def read_parameters(db: Session = Depends(get_db)):
     return parameters
 
 
-@app.put("/task/{task_id}")
-def update_task(task_id, Task: schemas.TaskCreate,  Parameters: schemas.ParameterBase, db: Session = Depends(get_db)):
-    return crud.update(task_sid = task_id, db = db, task = Task, parameters = Parameters)
+@app.put("/task/{task_sid}")
+def update_task(task_sid, Task: schemas.TaskCreate,  Parameters: schemas.ParameterBase, db: Session = Depends(get_db)):
+    return crud.update(task_sid = task_sid, db = db, task = Task, parameters = Parameters)
