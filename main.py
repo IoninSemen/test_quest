@@ -20,23 +20,18 @@ def get_db():
 
 
 
-@app.post("/task/add", response_model=schemas.Task)
-def create_task(request: schemas.TaskCreate, db: Session = Depends(get_db)):
+@app.post("/task/add", response_model=schemas.ShowTask)
+def create_task(request: schemas.ShowTask, db: Session = Depends(get_db)):
     db_task = crud.get_task_by_uuid(db, task_uuid=request.task_uuid)
     if db_task:
         raise HTTPException(status_code=400, detail="UUID already registered")
     return crud.create_task(db=db, task=request)
 
 
-@app.get("/tasks", response_model=List[schemas.ShowTask])
+@app.get("/tasks", response_model=List[schemas.Task])
 def read_tasks(db: Session = Depends(get_db)):
     tasks = crud.get_tasks(db)
     return tasks
-
-
-@app.post("/task/{task_sid}/parameters/", response_model=schemas.Parameter)
-def create_parameters_for_task(task_id: int, request: schemas.ParameterCreate, db: Session = Depends(get_db)):
-    return crud.create_task_parameter(db = db, params = request, task_id = task_id)
 
 
 @app.put("/task/{task_sid}")

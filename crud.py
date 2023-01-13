@@ -11,30 +11,27 @@ def get_tasks(db: Session):
 
 
 def update(task_sid, db: Session, task: schemas.TaskCreate, parameters: schemas.ParameterBase):
-    new_task = db.query(models.Task).filter(models.Task.id == task_sid).update({
+    update_task = db.query(models.Task).filter(models.Task.id == task_sid).update({
             models.Task.task_uuid: task.task_uuid,
             models.Task.description: task.description,
         }, synchronize_session=False)
     db.commit()
-    new_parameters = db.query(models.Parameter).filter(models.Parameter.owner_id == task_sid).update({
+    update_parameters = db.query(models.Parameter).filter(models.Parameter.owner_id == task_sid).update({
             models.Parameter.parameter: parameters.parameter,
             models.Parameter.parameter1: parameters.parameter1,
     }, synchronize_session=False)
     db.commit()
-    return "Update"
+    return "update"
 
 
-def create_task(db: Session, task: schemas.TaskCreate):
+def create_task(db: Session, task: schemas.ShowTask):
     db_task = models.Task(task_uuid=task.task_uuid, description=task.description)
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
-    return db_task
-
-
-def create_task_parameter(db: Session, params: schemas.ParameterBase, task_id: int):
-    db_parameter = models.Parameter(**params.dict(), owner_id = task_id)
+    print(db_task.id)
+    db_parameter = models.Parameter(**task.params.dict(), owner_id = db_task.id)
     db.add(db_parameter)
     db.commit()
     db.refresh(db_parameter)
-    return db_parameter
+    return db_task

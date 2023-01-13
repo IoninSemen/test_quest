@@ -31,9 +31,8 @@ class TaskCreate(TaskBase):
 
 
 class ShowTask(TaskBase):
-    id: int
     description: str
-    params: List[ParameterBase] = []
+    params: ParameterBase
 
     class Config:
         orm_mode = True
